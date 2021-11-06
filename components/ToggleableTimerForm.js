@@ -3,9 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import TimerButton from './TimerButton';
 import TimerForm from './TimerForm';
 
-export default class ToggleableTimerForm extends React.Component {
-    render(){
-      const {isOpen} = this.props;
+export default function ToggleableTimerForm ({isOpen}) {
       return(
         <View>
           {isOpen && <TimerForm/>}
@@ -13,5 +11,4 @@ export default class ToggleableTimerForm extends React.Component {
         </View>
 
       );
-    }
   }

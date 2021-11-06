@@ -4,10 +4,8 @@ import TimerButton from './TimerButton';
 import {millisecondsToHuman} from '../utils/TimerUtils'
 
 
-export default class Timer extends React.Component {
-    render(){
-      const{title,project,time} = this.props;
-      const formattedTime=millisecondsToHuman(time);
+export default function Timer ({title,project,time}) {
+     const formattedTime=millisecondsToHuman(time);
 
       return(
         <View style={styles.rootContainer}>
@@ -25,7 +23,6 @@ export default class Timer extends React.Component {
         </View>
 
       );
-    }
   }
 
 

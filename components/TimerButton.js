@@ -1,20 +1,16 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-export default class TimerButton extends React.Component {
-
-    render(){
-      const {color} = this.props;
-      const {title} = this.props;
-
+export default function TimerButton ({color,title,onPress}) {
       return(
-        <TouchableOpacity style = {[styles.rootContainer,{borderColor:color}]}
+        <TouchableOpacity
+          style = {[styles.rootContainer,{borderColor:color}]}
+          onPress = {onPress}
           >
          <Text style={[styles.text,{color:color}]}> {title}</Text>
 
         </TouchableOpacity>
       );
-    }
 }
 
 const styles = StyleSheet.create({

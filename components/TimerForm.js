@@ -2,10 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Text, TextInput} from 'react-native';
 import TimerButton from './TimerButton';
 
-export default class TimerForm extends React.Component {
-    render(){
-
-      const{id,title,project} = this.props;
+export default function TimerForm({id,title,project}) {
       const submitText = id ? 'Update' : 'Create';
 
       return(
@@ -30,7 +27,6 @@ export default class TimerForm extends React.Component {
 
         </View>
       );
-    }
 }
 
 const styles = StyleSheet.create({

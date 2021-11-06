@@ -37,14 +37,14 @@ const App: () => Node = () => {
             title="Mow the lawn"
             project="House Chores"
             time="8986300"
-            isEdit={false}
+
           />
           <EditableTimer
             id="2"
             title="Bake squash"
             project="Kitchen Chores"
             time="3890985"
-            isEdit={true}
+        
           />
 
          </ScrollView>
@@ -64,7 +64,10 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     fontSize:25,
     color:'#000',
-    textAlign:'center'
+    textAlign:'center',
+    paddingBottom:15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#D6D7DA',
   },
 
   scrollContainer:{
