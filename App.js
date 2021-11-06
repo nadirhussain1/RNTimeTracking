@@ -7,7 +7,6 @@
  */
 
 import React from 'react';
-import type {Node} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -15,44 +14,61 @@ import {
   View,
 } from 'react-native';
 
+import uuidv4 from 'uuid/v4';
 import EditableTimer from './components/EditableTimer';
 import ToggleableTimerForm from './components/ToggleableTimerForm';
 
 
+export default class App extends React.Component{
+  state = {
+    timers:[
+     {
+         id:uuidv4(),
+         title:'Study the book',
+         project:'Learning & Growth' ,
+         time:5454099,
+         isRunning:true,
+     },
+     {
+          id:uuidv4(),
+          title:'Eat dinner',
+          project:'Eating',
+          time:1239989,
+          isRunning:false,
+     },
+
+    ],
+  };
+
+  render(){
+    const{timers} = this.state;
+     return (
+          <View style={styles.rootContainer}>
+              <Text style={styles.title}>Timers</Text>
+              <ScrollView
+                 contentInsetAdjustmentBehavior="automatic"
+                  style={styles.scrollContainer}>
+
+                  <ToggleableTimerForm isOpen={false}/>
+                  {timers.map(({id,title,project,time,isRunning}) => (
+
+                    <EditableTimer
+                        key={id}
+                        id={id}
+                        title={title}
+                        project={project}
+                        time={time}
+                        isRunning={isRunning}
+                      />
+
+                    ))}
 
 
-const App: () => Node = () => {
-  return (
-
-      <View style={styles.rootContainer}>
-         <Text style={styles.title}>Timers</Text>
-         <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={styles.scrollContainer}>
-
-          <ToggleableTimerForm isOpen={false}/>
-
-          <EditableTimer
-            id="1"
-            title="Mow the lawn"
-            project="House Chores"
-            time="8986300"
-
-          />
-          <EditableTimer
-            id="2"
-            title="Bake squash"
-            project="Kitchen Chores"
-            time="3890985"
-        
-          />
-
-         </ScrollView>
-
-      </View>
-
-  );
-};
+            </ScrollView>
+         </View>
+     );
+  }
+}
 
 const styles = StyleSheet.create({
 
