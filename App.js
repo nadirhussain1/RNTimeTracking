@@ -9,34 +9,68 @@
 import React from 'react';
 import type {Node} from 'react';
 import {
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 
-import TimerForm from './components/TimerForm';
+import EditableTimer from './components/EditableTimer';
+import ToggleableTimerForm from './components/ToggleableTimerForm';
 
 
 
 
 const App: () => Node = () => {
   return (
-    <SafeAreaView >
-      <StatusBar barStyle= 'light-content' />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic">
 
-        <TimerForm submitText='Create'/>
+      <View style={styles.rootContainer}>
+         <Text style={styles.title}>Timers</Text>
+         <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            style={styles.scrollContainer}>
 
-      </ScrollView>
-    </SafeAreaView>
+          <ToggleableTimerForm isOpen={false}/>
+
+          <EditableTimer
+            id="1"
+            title="Mow the lawn"
+            project="House Chores"
+            time="8986300"
+            isEdit={false}
+          />
+          <EditableTimer
+            id="2"
+            title="Bake squash"
+            project="Kitchen Chores"
+            time="3890985"
+            isEdit={true}
+          />
+
+         </ScrollView>
+
+      </View>
+
   );
 };
 
 const styles = StyleSheet.create({
+
+  rootContainer:{
+    flex:1,
+  },
+
+  title:{
+    fontWeight:'bold',
+    fontSize:25,
+    color:'#000',
+    textAlign:'center'
+  },
+
+  scrollContainer:{
+    paddingHorizontal:15,
+    marginTop:15,
+  },
 
 });
 

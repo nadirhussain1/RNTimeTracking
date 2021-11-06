@@ -4,14 +4,22 @@ import TimerButton from './TimerButton';
 
 export default class TimerForm extends React.Component {
     render(){
-      const {submitText} = this.props;
+
+      const{id,title,project} = this.props;
+      const submitText = id ? 'Update' : 'Create';
 
       return(
         <View style = {styles.rootContainer}>
           <Text style={styles.title}>Title</Text>
-          <TextInput style={styles.inputContainer}/>
+          <TextInput
+            style={styles.inputContainer}
+            defaultValue={title}
+          />
           <Text style={styles.project}>Project</Text>
-          <TextInput style={styles.inputContainer}/>
+          <TextInput
+            style={styles.inputContainer}
+            defaultValue={project}
+            />
 
           <View style={styles.buttonsContainer}>
 
@@ -33,6 +41,7 @@ const styles = StyleSheet.create({
       borderWidth:2,
       borderColor:'#D0D0D0',
       padding:10,
+      marginTop:15,
    },
 
    title:{
