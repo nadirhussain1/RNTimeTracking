@@ -14,9 +14,11 @@ import {
   View,
 } from 'react-native';
 
-import uuidv4 from 'uuid/v4';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 import EditableTimer from './components/EditableTimer';
 import ToggleableTimerForm from './components/ToggleableTimerForm';
+import {newTimer} from './utils/TimerUtils';
 
 
 export default class App extends React.Component{
@@ -40,6 +42,38 @@ export default class App extends React.Component{
     ],
   };
 
+  handleNewTimerCreation = timer => {
+      const {timers} = this.state;
+
+      this.setState({timers: [newTimer(timer),...timers]});
+  }
+
+  updateEditedTimer = attrs => {
+     const{timers} = this.state;
+
+     this.setState({
+       timers: timers.map(timer => {
+
+           if(timer.id === attrs.id){
+              const{title,project} = attrs;
+              return{
+                 ...timer,
+                 title,
+                 project,
+              };
+           }
+           return timer;
+         }),
+
+       });
+  }
+
+  removeTimer = timerId => {
+     this.setState({
+         timers:this.state.timers.filter( t => t.id !== timerId),
+       });
+  }
+
   render(){
     const{timers} = this.state;
      return (
@@ -49,7 +83,11 @@ export default class App extends React.Component{
                  contentInsetAdjustmentBehavior="automatic"
                   style={styles.scrollContainer}>
 
-                  <ToggleableTimerForm isOpen={false}/>
+                  <ToggleableTimerForm
+                    isOpen={false}
+                    onSubmit={this.handleNewTimerCreation}
+                  />
+
                   {timers.map(({id,title,project,time,isRunning}) => (
 
                     <EditableTimer
@@ -59,6 +97,8 @@ export default class App extends React.Component{
                         project={project}
                         time={time}
                         isRunning={isRunning}
+                        onEditDone={this.updateEditedTimer}
+                        onRemovePress = {this.removeTimer}
                       />
 
                     ))}
@@ -92,5 +132,3 @@ const styles = StyleSheet.create({
   },
 
 });
-
-export default App;

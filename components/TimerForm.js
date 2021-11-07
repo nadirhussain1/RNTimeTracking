@@ -2,7 +2,39 @@ import React from 'react';
 import {StyleSheet, View, Text, TextInput} from 'react-native';
 import TimerButton from './TimerButton';
 
-export default function TimerForm({id,title,project}) {
+export default class TimerForm extends React.Component {
+     constructor(props){
+       super(props)
+
+       const{id,title,project} = props;
+
+       this.state = {
+          title :  id ? title : '',
+          project : id ? project : '',
+       };
+     }
+
+     handleTitleChange = title => {
+       this.setState({title});
+     }
+
+     handleProjectChange = project => {
+       this.setState({project});
+     }
+
+     handleSubmit = () => {
+        const{id,onSubmit} = this.props;
+        const{title,project} = this.state;
+
+        onSubmit({id,title,project});
+     }
+
+
+     render(){
+
+      const{id,onClose} = this.props;
+      const{title,project} = this.state;
+
       const submitText = id ? 'Update' : 'Create';
 
       return(
@@ -10,23 +42,35 @@ export default function TimerForm({id,title,project}) {
           <Text style={styles.title}>Title</Text>
           <TextInput
             style={styles.inputContainer}
-            defaultValue={title}
+            value={title}
+            onChangeText={this.handleTitleChange}
           />
           <Text style={styles.project}>Project</Text>
           <TextInput
             style={styles.inputContainer}
-            defaultValue={project}
+            value={project}
+            onChangeText = {this.handleProjectChange}
             />
 
           <View style={styles.buttonsContainer}>
 
-           <TimerButton color='#21BA45' title = {submitText}/>
-           <TimerButton color='#DB2828' title = 'Cancel'/>
+           <TimerButton
+             color='#21BA45'
+             title = {submitText}
+             onPress={this.handleSubmit}
+             />
+
+           <TimerButton
+            color='#DB2828'
+            title = 'Cancel'
+            onPress={onClose}
+            />
 
           </View>
 
         </View>
       );
+    }
 }
 
 const styles = StyleSheet.create({
