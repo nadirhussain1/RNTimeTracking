@@ -29,6 +29,11 @@ export default class EditableTimer extends React.Component{
     onRemovePress(id);
   }
 
+  handleToggleTimer = () =>{
+    const{id,toggleTimer} = this.props;
+    toggleTimer(id);
+  }
+
   render(){
     const{id,title,project,time,isRunning}=this.props;
     const{isEdit} = this.state;
@@ -55,6 +60,7 @@ export default class EditableTimer extends React.Component{
             isRunning={isRunning}
             onEditPress = {this.handleEditPress}
             onRemovePress = {this.handleRemove}
+            toggleTimer = {this.handleToggleTimer}
             />
        }
        </View>

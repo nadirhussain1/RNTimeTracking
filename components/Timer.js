@@ -5,7 +5,30 @@ import {millisecondsToHuman} from '../utils/TimerUtils'
 
 
 export default class Timer extends React.Component {
-    render(){
+
+  renderStartStopButton(){
+    const { isRunning, toggleTimer} = this.props;
+
+    if(isRunning){
+      return(
+         <TimerButton
+           title='Stop'
+           color='#DB2828'
+           onPress = {toggleTimer}
+         />
+       );
+      }
+
+    return(
+       <TimerButton
+         title='Start'
+         color='#21BA45'
+         onPress = {toggleTimer}
+       />
+     );
+  }
+
+render(){
 
      const { time , title , project,onEditPress,onRemovePress} = this.props;
      const formattedTime=millisecondsToHuman(time);
@@ -21,7 +44,7 @@ export default class Timer extends React.Component {
                 <TimerButton title='Remove' color='blue' onPress={onRemovePress} />
            </View>
 
-           <TimerButton title='Start' color='#21BA45' />
+          {this.renderStartStopButton()}
 
         </View>
 

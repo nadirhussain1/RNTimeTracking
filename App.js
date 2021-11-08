@@ -42,6 +42,33 @@ export default class App extends React.Component{
     ],
   };
 
+  componentDidMount (){
+      const TIME_INTERVAL = 1000;
+
+      this.intervalId = setInterval( () => {
+          const{timers} = this.state;
+
+          this.setState({
+            timers : timers.map(timer =>{
+              const{time,isRunning} = timer;
+
+              return{
+                ...timer,
+                time:isRunning? time+TIME_INTERVAL : time,
+
+              };
+
+              }),
+
+            });
+
+        }, TIME_INTERVAL);
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.intervalId); d
+  }
+
   handleNewTimerCreation = timer => {
       const {timers} = this.state;
 
@@ -74,6 +101,26 @@ export default class App extends React.Component{
        });
   }
 
+  toggleTimer = timerId => {
+     const{timers} = this.state;
+
+     this.setState({
+       timers: timers.map(timer => {
+           const { id, isRunning } = timer;
+           if( id === timerId){
+
+              return{
+                 ...timer,
+                 isRunning:!isRunning,
+              };
+           }
+           return timer;
+         }),
+
+       });
+
+  }
+
   render(){
     const{timers} = this.state;
      return (
@@ -99,6 +146,7 @@ export default class App extends React.Component{
                         isRunning={isRunning}
                         onEditDone={this.updateEditedTimer}
                         onRemovePress = {this.removeTimer}
+                        toggleTimer = {this.toggleTimer}
                       />
 
                     ))}
