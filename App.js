@@ -12,6 +12,7 @@ import {
   StyleSheet,
   Text,
   View,
+  AsyncStorage,
 } from 'react-native';
 
 import 'react-native-get-random-values';
@@ -20,59 +21,92 @@ import EditableTimer from './components/EditableTimer';
 import ToggleableTimerForm from './components/ToggleableTimerForm';
 import {newTimer} from './utils/TimerUtils';
 
+const ASYNC_STORAGE_COMMENTS_KEY = 'ASYNC_STORAGE_COMMENTS_KEY';
+const TIME_INTERVAL = 1000;
 
 export default class App extends React.Component{
+
+
+
   state = {
     timers:[
-     {
-         id:uuidv4(),
-         title:'Study the book',
-         project:'Learning & Growth' ,
-         time:5454099,
-         isRunning:true,
-     },
-     {
-          id:uuidv4(),
-          title:'Eat dinner',
-          project:'Eating',
-          time:1239989,
+        {
+          id:1,
+          title:'Default Task',
+          project:'Default Project',
+          time:0,
           isRunning:false,
-     },
 
+        },
     ],
   };
 
-  componentDidMount (){
-      const TIME_INTERVAL = 1000;
 
-      this.intervalId = setInterval( () => {
-          const{timers} = this.state;
 
-          this.setState({
-            timers : timers.map(timer =>{
-              const{time,isRunning} = timer;
 
-              return{
-                ...timer,
-                time:isRunning? time+TIME_INTERVAL : time,
 
-              };
 
-              }),
+  async componentDidMount (){
+    try{
+        console.log("Inside componentDidMount");
+        const timersData = await AsyncStorage.getItem(ASYNC_STORAGE_COMMENTS_KEY);
+        console.log("loaded data"+timersData);
+        if(!timersData){
+          return
+        }
+        this.setState({
+            timers:  JSON.parse(timersData),
+          });
 
-            });
 
-        }, TIME_INTERVAL);
+
+          this.intervalId = setInterval( () => {
+              const{timers} = this.state;
+
+              this.setState({
+                timers : timers.map(timer =>{
+                  const{time,isRunning} = timer;
+
+                  return{
+                    ...timer,
+                    time:isRunning? time+TIME_INTERVAL : time,
+
+                  };
+
+                  }),
+
+                });
+
+            }, TIME_INTERVAL);
+
+    }catch(e){
+      console.log("Error loading data"+e)
+    }
+
   }
 
   componentWillUnmount(){
-    clearInterval(this.intervalId); d
+    clearInterval(this.intervalId);
   }
+
+
+
 
   handleNewTimerCreation = timer => {
       const {timers} = this.state;
+      let updatedTimers = [newTimer(timer),...timers];
+      let updatedTimersString=JSON.stringify(updatedTimers);
 
-      this.setState({timers: [newTimer(timer),...timers]});
+      console.log('Updated data string'+updatedTimersString);
+
+      this.setState({timers: updatedTimers});
+
+
+      try{
+          AsyncStorage.setItem(ASYNC_STORAGE_COMMENTS_KEY,updatedTimersString );
+      }catch(e){
+        console.log('Error on saving timers to asyncstorage'+e);
+      }
   }
 
   updateEditedTimer = attrs => {
@@ -96,9 +130,17 @@ export default class App extends React.Component{
   }
 
   removeTimer = timerId => {
+    let filteredTimers = this.state.timers.filter( t => t.id !== timerId);
+    let filteredTimersString= JSON.stringify(filteredTimers);
      this.setState({
-         timers:this.state.timers.filter( t => t.id !== timerId),
+         timers:filteredTimers,
        });
+
+       try{
+           AsyncStorage.setItem(ASYNC_STORAGE_COMMENTS_KEY,filteredTimersString );
+       }catch(e){
+         console.log('Error on saving timers to asyncstorage'+e);
+       }
   }
 
   toggleTimer = timerId => {
@@ -135,6 +177,8 @@ export default class App extends React.Component{
                     onSubmit={this.handleNewTimerCreation}
                   />
 
+
+
                   {timers.map(({id,title,project,time,isRunning}) => (
 
                     <EditableTimer
@@ -150,6 +194,7 @@ export default class App extends React.Component{
                       />
 
                     ))}
+
 
 
             </ScrollView>
